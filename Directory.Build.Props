@@ -1,0 +1,10 @@
+<Project>
+    <PropertyGroup>
+        <Version>1.0.0.0</Version>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Company>Dynamic Super Software.</Company>
+        <Authors>Arjun Bagojikop</Authors>
+        <Copyright>user contributions licensed under cc by-sa. rev 2020.10.26.37891</Copyright>
+    </PropertyGroup>
+</Project>

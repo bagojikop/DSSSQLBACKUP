@@ -1,0 +1,44 @@
+{
+    "sqlSetting": {
+        "credential": {
+            "server": "dssserver",
+            "typ": 2,
+            "userid": "sa",
+            "password": "",
+            "encrypt": false,
+            "trustedConnection": true
+        },
+        "connectionString": ""
+    },
+    "databases": [],
+    "backupDestination": "",
+    "backupModes": {
+        "full": {
+            "typ": "Weekly",
+            "weekOfDay": 6,
+            "hour": 22,
+            "minute": 0,
+            "enabled": true
+        },
+        "diff": {
+            "typ": "Daily",
+            "hour": 22,
+            "minute": 0,
+            "enabled": true
+        },
+        "log": {
+            "typ": "Weekly",
+            "hour": 22,
+            "minute": 0,
+            "enabled": true
+        },
+       
+        "deleteOldBackups":{
+            "isDelete":true,
+            "beforeDays": 7
+        }
+    },
+    "isSendMail": true,
+    "mailAdderess": "bagojikop76@gmail.com"
+  
+}
