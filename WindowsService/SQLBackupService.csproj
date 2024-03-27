@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BackupScript.cs" />
+    <Compile Remove="Backupsettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
@@ -17,5 +22,9 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\Arjun\source\repos\SQLBackup\SQLBackup\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SBKLIB\SBKLIB.csproj" />
   </ItemGroup>
 </Project>

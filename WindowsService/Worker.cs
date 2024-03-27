@@ -4,9 +4,11 @@ namespace SQLBackupService
 {
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using SBKLIB;
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Reflection;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
@@ -24,25 +26,44 @@ namespace SQLBackupService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken )
         {
+            string serviceDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+           
+            string parentDirectory = Path.Combine(serviceDirectory, "..");
+            string filePath = Path.Combine(parentDirectory, "backupSettings.json");
+
             while (!stoppingToken.IsCancellationRequested)
-            {
-                string jsonString = File.ReadAllText("backupSettings.json");
-              
-
-                Schema schema = JsonSerializer.Deserialize<Schema>(jsonString);
-
-                TimeSpan intervalhrs = getintervaltime(schema);
-
-                if (schema != null)
                 {
-                       
-                      BackupSchedulde.executeBackup(schema, _logger);
+                    
+                        string jsonString = File.ReadAllText(filePath);
+
+
+                        Schema schema = JsonSerializer.Deserialize<Schema>(jsonString);
+
+                        TimeSpan intervalhrs = getintervaltime(schema);
+
+                        if (schema != null)
+                        {
+
+                            BackupSchedulde.executeBackup(schema, _logger);
+                        }
+
+                        // Delay for one hour before checking again
+                        await Task.Delay(intervalhrs, stoppingToken);
+                    //}
+
+                    //else
+                    //{
+                    //    // Log a message indicating that the file does not exist
+                    //    _logger.LogWarning("Backup settings file 'backupSettings.json' not found.");
+
+                    //    // Delay for a shorter interval before trying again
+                    //    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                    //}
                 }
-                
-                // Delay for one hour before checking again
-                await Task.Delay(intervalhrs, stoppingToken);
             }
-        }
+            
+ 
 
         private TimeSpan getintervaltime(Schema schema)
         {

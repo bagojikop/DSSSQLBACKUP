@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WindowsService\SQLBackupService.csproj" />
+    <ProjectReference Include="..\SBKLIB\SBKLIB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

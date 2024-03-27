@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using SQLBackupService;
+using SBKLIB;
 namespace SQLBackupDesk
 {
     public partial class SqlConnForm : Form

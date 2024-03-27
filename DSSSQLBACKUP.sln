@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLBackupDesk", "DeskApplic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLBackupService", "WindowsService\SQLBackupService.csproj", "{EA6655B5-3579-4482-B632-0B130BE9EC5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBKLIB", "SBKLIB\SBKLIB.csproj", "{B8BB30C3-4540-4309-960D-856A957D5A97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EA6655B5-3579-4482-B632-0B130BE9EC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA6655B5-3579-4482-B632-0B130BE9EC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA6655B5-3579-4482-B632-0B130BE9EC5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8BB30C3-4540-4309-960D-856A957D5A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8BB30C3-4540-4309-960D-856A957D5A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8BB30C3-4540-4309-960D-856A957D5A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8BB30C3-4540-4309-960D-856A957D5A97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

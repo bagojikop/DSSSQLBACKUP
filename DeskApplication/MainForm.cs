@@ -1,5 +1,4 @@
-﻿using SQLBackupService;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using SBKLIB;
 
 namespace SQLBackupDesk
 {
@@ -78,7 +77,7 @@ namespace SQLBackupDesk
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            string jsonString = File.ReadAllText("backupSettings.json");
+            string jsonString = File.ReadAllText("../backupSettings.json");
             backupschema = JsonSerializer.Deserialize<Schema>(jsonString);
             if (backupschema?.sqlSetting != null)
             {
@@ -88,7 +87,9 @@ namespace SQLBackupDesk
                 MailToggle.Checked = backupschema.isSendMail;
                 MailtextBox.Text = backupschema.mailAdderess;
                 foreverComboBox1.SelectedIndex = 0;
-                setschValue();
+                backupschema.backupModes=backupschema.backupModes ?? new Backupmodes();
+                backupschema.backupModes.deleteOldBackups= backupschema.backupModes.deleteOldBackups ?? new Deleteoldbackups();
+               setschValue();
                 Refresh();
             }
         }
@@ -103,7 +104,7 @@ namespace SQLBackupDesk
             frm.ShowDialog();
             if (frm.save)
             {
-                backupschema.backupModes = frm.Backupmodes;
+                backupschema.backupModes = frm.Backupmodes ;
                 setschValue();
             }
 
@@ -132,7 +133,7 @@ namespace SQLBackupDesk
             backupschema.mailAdderess = MailtextBox.Text;
 
             var jsongstring = JsonSerializer.Serialize(backupschema);
-            File.WriteAllText("backupSettings.json", jsongstring);
+            File.WriteAllText("../backupSettings.json", jsongstring);
 
             Close();
         }
@@ -191,7 +192,7 @@ namespace SQLBackupDesk
                 try
                 {
                     // Perform backup procedure
-                    var message = BackupSchedulde.BackupProcedure(backupschema, backtype);
+                    var message = schedulde.BackupProcedure(backupschema, backtype);
 
                     // Report progress and pass message to RunWorkerCompleted event
                     backgroundWorker1.ReportProgress(100, message);
