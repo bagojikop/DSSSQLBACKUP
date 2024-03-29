@@ -8,18 +8,19 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using SBKLIB;
+using System.Reflection;
 
   namespace SQLBackupService
 {
-    public static class BackupSchedulde
+    public static class BackupSchedule
     {
 
-        public static void executeBackup(Schema schema, ILogger<Worker> logger)
+        public static void executeBackup(Schema schema,  ILogger<Worker> logger)
         {
 
             if (schema.backupModes != null)
             {
-
+              
                 if (schema.backupModes.full.enabled)
                     backup(schema.backupModes.full, schema, logger, 1);
 
@@ -36,9 +37,11 @@ using SBKLIB;
         public static void BackupProcedure(Schema schema, ILogger<Worker> logger,DateTime TargetDate ,byte typeId,bool isDeleteOld)
         {
             string datetime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-
+            string serviceDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string parentDirectory = Path.Combine(serviceDirectory, "..");
+            string sqlcmdpath = Path.Combine(parentDirectory, "sqlcmd");
             // Create a temporary directory for recovery
-            string tempDirectory = Path.Combine(schema.backupDestination, $"TempRecovery_{datetime}");
+           string tempDirectory = Path.Combine(schema.backupDestination, $"TempRecovery_{datetime}");
             if ( typeId==1 && isDeleteOld)
             {
                 Directory.CreateDirectory(tempDirectory);
@@ -71,7 +74,7 @@ using SBKLIB;
                     {
                       //  ProcessStartInfo info = new ProcessStartInfo("sqlcmd", $"{Auth} -S {schema.sqlSetting.credential.server} -Q \"EXEC sp_BackupDatabases @backupLocation='{schema.backupDestination}\\', @databaseName='{db}', @backupType='{backType}'\"");
                         
-                        ProcessStartInfo info = new ProcessStartInfo("../sqlcmd", argument);
+                        ProcessStartInfo info = new ProcessStartInfo($"{sqlcmdpath}", argument);
 
                         info.UseShellExecute = false;
                         info.CreateNoWindow = true;
@@ -137,10 +140,11 @@ using SBKLIB;
         }
 
       
-        private static  void backup(backupType backuptype, Schema schema ,ILogger<Worker> logger,byte  typeId)
+        public static  TimeSpan backup(backupType backuptype, Schema schema ,ILogger<Worker> logger,byte  typeId)
         {
             DateTime targetDate = DateTime.Now;
             int? delBefore = schema.backupModes.deleteOldBackups.isDelete ? schema.backupModes.deleteOldBackups.beforeDays : null;
+            TimeSpan timeSpan = getintervaltime(schema);
             switch (backuptype.typ)
             {
 
@@ -159,6 +163,8 @@ using SBKLIB;
                             targetDate = DateTime.Now.AddDays(-delBefore ?? 0);
                         BackupProcedure(schema, logger, targetDate, typeId, schema.backupModes.deleteOldBackups.isDelete);
                     }
+                    else
+                        timeSpan = TimeSpan.FromMinutes(1);
 
                     break;
                 case "Weekly":
@@ -169,6 +175,8 @@ using SBKLIB;
                         targetDate = DateTime.Now.AddDays(-(delBefore * 7) ?? 0);
                         BackupProcedure(schema, logger, targetDate, typeId, schema.backupModes.deleteOldBackups.isDelete);
                     }
+                    else
+                        timeSpan = TimeSpan.FromMinutes(1);
 
                     break;
                 case "Monthly":
@@ -185,6 +193,8 @@ using SBKLIB;
                         targetDate = DateTime.Now.AddMonths(-delBefore ?? 0);
                         BackupProcedure(schema, logger, targetDate, typeId, schema.backupModes.deleteOldBackups.isDelete);
                     }
+                    else
+                        timeSpan = TimeSpan.FromMinutes(1);
 
                     break;
                 case "Yearly":
@@ -195,11 +205,63 @@ using SBKLIB;
                         targetDate = DateTime.Now.AddYears(-delBefore ?? 0);
                         BackupProcedure(schema, logger, targetDate, typeId, schema.backupModes.deleteOldBackups.isDelete);
                     }
-
+                    else
+                        timeSpan = TimeSpan.FromMinutes(1);
                     break;
             }
 
+            return timeSpan;
             
+        }
+
+
+        private  static TimeSpan getintervaltime(Schema schema)
+        {
+
+            TimeSpan timeSpan = TimeSpan.FromHours(1);
+
+            List<backupType> backupTypes = new List<backupType>();
+            if (schema.backupModes != null)
+            {
+                backupTypes.Add(schema.backupModes.full);
+                backupTypes.Add(schema.backupModes.diff);
+                backupTypes.Add(schema.backupModes.log);
+
+                var btype1 = backupTypes.Where(w => w.typ == "Hourly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+
+                if (btype1 != null)
+                {
+                    timeSpan = TimeSpan.FromHours(btype1.hour) + TimeSpan.FromMinutes(btype1.minute);
+                    return timeSpan;
+                }
+                var btype2 = backupTypes.Where(w => w.typ == "Daily" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+
+                if (btype2 != null)
+                {
+                    timeSpan = TimeSpan.FromHours(24);
+                    return timeSpan;
+                }
+                var btype3 = backupTypes.Where(w => w.typ == "Weekly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+
+                if (btype3 != null)
+                {
+                    timeSpan = TimeSpan.FromHours(168);
+                    return timeSpan;
+                }
+                var btype4 = backupTypes.Where(w => w.typ == "Monthly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+                if (btype4 != null)
+                {
+                    timeSpan = TimeSpan.FromHours(720);
+                    return timeSpan;
+                }
+                var btype5 = backupTypes.Where(w => w.typ == "Yearly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+                if (btype5 != null)
+                {
+                    timeSpan = TimeSpan.FromHours(8760);
+                    return timeSpan;
+                }
+            }
+            return timeSpan;
         }
     }
 }

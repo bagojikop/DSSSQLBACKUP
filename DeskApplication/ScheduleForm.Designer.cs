@@ -32,6 +32,7 @@
             TLogPanel = new ReaLTaiizor.Controls.LostBorderPanel();
             TLogCheckBox = new ReaLTaiizor.Controls.ParrotCheckBox();
             TLogPanelSchTime = new ReaLTaiizor.Controls.LostBorderPanel();
+            TLogBackUpMinutes = new NumericUpDown();
             TLogBackUpType = new ReaLTaiizor.Controls.DungeonComboBox();
             TLogPanelSch = new ReaLTaiizor.Controls.LostBorderPanel();
             TLogWeekOfDayPanel = new ReaLTaiizor.Controls.LostBorderPanel();
@@ -43,10 +44,10 @@
             TLogMonthOfDayNumericBox = new ReaLTaiizor.Controls.DungeonNumeric();
             TLogBackUpAMPM = new ReaLTaiizor.Controls.DungeonComboBox();
             TLogBackUpHrs = new ReaLTaiizor.Controls.DungeonNumeric();
-            TLogBackUpMinutes = new ReaLTaiizor.Controls.DungeonNumeric();
             FullPanel = new ReaLTaiizor.Controls.LostBorderPanel();
             FullCheckBox = new ReaLTaiizor.Controls.ParrotCheckBox();
             FullPanelSchTime = new ReaLTaiizor.Controls.LostBorderPanel();
+            FullBackUpMinutes = new NumericUpDown();
             FullBackUpType = new ReaLTaiizor.Controls.DungeonComboBox();
             FullPanelSch = new ReaLTaiizor.Controls.LostBorderPanel();
             FullWeekOfDayPanel = new ReaLTaiizor.Controls.LostBorderPanel();
@@ -58,10 +59,10 @@
             FullMonthOfDayNumericBox = new ReaLTaiizor.Controls.DungeonNumeric();
             FullBackUpAMPM = new ReaLTaiizor.Controls.DungeonComboBox();
             FullBackUpHrs = new ReaLTaiizor.Controls.DungeonNumeric();
-            FullBackUpMinutes = new ReaLTaiizor.Controls.DungeonNumeric();
             DiffPanel = new ReaLTaiizor.Controls.LostBorderPanel();
             DiffCheckBox = new ReaLTaiizor.Controls.ParrotCheckBox();
             DiffPanelSchTime = new ReaLTaiizor.Controls.LostBorderPanel();
+            DiffBackUpMinutes = new NumericUpDown();
             DiffBackUpType = new ReaLTaiizor.Controls.DungeonComboBox();
             DiffPanelSch = new ReaLTaiizor.Controls.LostBorderPanel();
             DiffWeekOfDayPanel = new ReaLTaiizor.Controls.LostBorderPanel();
@@ -73,7 +74,6 @@
             DiffMonthOfDayNumericBox = new ReaLTaiizor.Controls.DungeonNumeric();
             DiffBackUpAMPM = new ReaLTaiizor.Controls.DungeonComboBox();
             DiffBackUpHrs = new ReaLTaiizor.Controls.DungeonNumeric();
-            DiffBackUpMinutes = new ReaLTaiizor.Controls.DungeonNumeric();
             foxLabel8 = new ReaLTaiizor.Controls.FoxLabel();
             foxLabel7 = new ReaLTaiizor.Controls.FoxLabel();
             foxLabel6 = new ReaLTaiizor.Controls.FoxLabel();
@@ -86,16 +86,19 @@
             parrotGroupBox3.SuspendLayout();
             TLogPanel.SuspendLayout();
             TLogPanelSchTime.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TLogBackUpMinutes).BeginInit();
             TLogPanelSch.SuspendLayout();
             TLogWeekOfDayPanel.SuspendLayout();
             TLogMonthPanel.SuspendLayout();
             FullPanel.SuspendLayout();
             FullPanelSchTime.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)FullBackUpMinutes).BeginInit();
             FullPanelSch.SuspendLayout();
             FullWeekOfDayPanel.SuspendLayout();
             FullMonthPanel.SuspendLayout();
             DiffPanel.SuspendLayout();
             DiffPanelSchTime.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DiffBackUpMinutes).BeginInit();
             DiffPanelSch.SuspendLayout();
             DiffWeekOfDayPanel.SuspendLayout();
             DiffMonthPanel.SuspendLayout();
@@ -162,11 +165,11 @@
             // 
             TLogPanelSchTime.BackColor = Color.FromArgb(63, 63, 70);
             TLogPanelSchTime.BorderColor = Color.White;
+            TLogPanelSchTime.Controls.Add(TLogBackUpMinutes);
             TLogPanelSchTime.Controls.Add(TLogBackUpType);
             TLogPanelSchTime.Controls.Add(TLogPanelSch);
             TLogPanelSchTime.Controls.Add(TLogBackUpAMPM);
             TLogPanelSchTime.Controls.Add(TLogBackUpHrs);
-            TLogPanelSchTime.Controls.Add(TLogBackUpMinutes);
             TLogPanelSchTime.Dock = DockStyle.Right;
             TLogPanelSchTime.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             TLogPanelSchTime.ForeColor = Color.White;
@@ -176,6 +179,17 @@
             TLogPanelSchTime.ShowText = true;
             TLogPanelSchTime.Size = new Size(411, 125);
             TLogPanelSchTime.TabIndex = 34;
+            // 
+            // TLogBackUpMinutes
+            // 
+            TLogBackUpMinutes.Increment = new decimal(new int[] { 15, 0, 0, 0 });
+            TLogBackUpMinutes.Location = new Point(221, 11);
+            TLogBackUpMinutes.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
+            TLogBackUpMinutes.Name = "TLogBackUpMinutes";
+            TLogBackUpMinutes.Size = new Size(89, 29);
+            TLogBackUpMinutes.TabIndex = 39;
+            TLogBackUpMinutes.TextAlign = HorizontalAlignment.Right;
+            TLogBackUpMinutes.ValueChanged += TLogBackUpMinutes_ValueChanged;
             // 
             // TLogBackUpType
             // 
@@ -382,27 +396,6 @@
             TLogBackUpHrs.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
             TLogBackUpHrs.Value = 1L;
             // 
-            // TLogBackUpMinutes
-            // 
-            TLogBackUpMinutes.BackColor = Color.Transparent;
-            TLogBackUpMinutes.BackColorA = Color.FromArgb(246, 246, 246);
-            TLogBackUpMinutes.BackColorB = Color.FromArgb(254, 254, 254);
-            TLogBackUpMinutes.BorderColor = Color.FromArgb(180, 180, 180);
-            TLogBackUpMinutes.ButtonForeColorA = Color.FromArgb(75, 75, 75);
-            TLogBackUpMinutes.ButtonForeColorB = Color.FromArgb(75, 75, 75);
-            TLogBackUpMinutes.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            TLogBackUpMinutes.ForeColor = Color.FromArgb(76, 76, 76);
-            TLogBackUpMinutes.Location = new Point(216, 11);
-            TLogBackUpMinutes.Maximum = 59L;
-            TLogBackUpMinutes.Minimum = 0L;
-            TLogBackUpMinutes.MinimumSize = new Size(62, 28);
-            TLogBackUpMinutes.Name = "TLogBackUpMinutes";
-            TLogBackUpMinutes.Size = new Size(93, 28);
-            TLogBackUpMinutes.TabIndex = 32;
-            TLogBackUpMinutes.Text = "dungeonNumeric11";
-            TLogBackUpMinutes.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
-            TLogBackUpMinutes.Value = 0L;
-            // 
             // FullPanel
             // 
             FullPanel.BackColor = Color.FromArgb(63, 63, 70);
@@ -444,11 +437,11 @@
             // 
             FullPanelSchTime.BackColor = Color.FromArgb(63, 63, 70);
             FullPanelSchTime.BorderColor = Color.White;
+            FullPanelSchTime.Controls.Add(FullBackUpMinutes);
             FullPanelSchTime.Controls.Add(FullBackUpType);
             FullPanelSchTime.Controls.Add(FullPanelSch);
             FullPanelSchTime.Controls.Add(FullBackUpAMPM);
             FullPanelSchTime.Controls.Add(FullBackUpHrs);
-            FullPanelSchTime.Controls.Add(FullBackUpMinutes);
             FullPanelSchTime.Dock = DockStyle.Right;
             FullPanelSchTime.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             FullPanelSchTime.ForeColor = Color.White;
@@ -458,6 +451,17 @@
             FullPanelSchTime.ShowText = true;
             FullPanelSchTime.Size = new Size(411, 130);
             FullPanelSchTime.TabIndex = 34;
+            // 
+            // FullBackUpMinutes
+            // 
+            FullBackUpMinutes.Increment = new decimal(new int[] { 15, 0, 0, 0 });
+            FullBackUpMinutes.Location = new Point(221, 12);
+            FullBackUpMinutes.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
+            FullBackUpMinutes.Name = "FullBackUpMinutes";
+            FullBackUpMinutes.Size = new Size(89, 29);
+            FullBackUpMinutes.TabIndex = 37;
+            FullBackUpMinutes.TextAlign = HorizontalAlignment.Right;
+            FullBackUpMinutes.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // FullBackUpType
             // 
@@ -664,27 +668,6 @@
             FullBackUpHrs.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
             FullBackUpHrs.Value = 1L;
             // 
-            // FullBackUpMinutes
-            // 
-            FullBackUpMinutes.BackColor = Color.Transparent;
-            FullBackUpMinutes.BackColorA = Color.FromArgb(246, 246, 246);
-            FullBackUpMinutes.BackColorB = Color.FromArgb(254, 254, 254);
-            FullBackUpMinutes.BorderColor = Color.FromArgb(180, 180, 180);
-            FullBackUpMinutes.ButtonForeColorA = Color.FromArgb(75, 75, 75);
-            FullBackUpMinutes.ButtonForeColorB = Color.FromArgb(75, 75, 75);
-            FullBackUpMinutes.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            FullBackUpMinutes.ForeColor = Color.FromArgb(76, 76, 76);
-            FullBackUpMinutes.Location = new Point(216, 11);
-            FullBackUpMinutes.Maximum = 59L;
-            FullBackUpMinutes.Minimum = 0L;
-            FullBackUpMinutes.MinimumSize = new Size(62, 28);
-            FullBackUpMinutes.Name = "FullBackUpMinutes";
-            FullBackUpMinutes.Size = new Size(93, 28);
-            FullBackUpMinutes.TabIndex = 32;
-            FullBackUpMinutes.Text = "dungeonNumeric11";
-            FullBackUpMinutes.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
-            FullBackUpMinutes.Value = 0L;
-            // 
             // DiffPanel
             // 
             DiffPanel.BackColor = Color.FromArgb(63, 63, 70);
@@ -725,11 +708,11 @@
             // 
             DiffPanelSchTime.BackColor = Color.FromArgb(63, 63, 70);
             DiffPanelSchTime.BorderColor = Color.White;
+            DiffPanelSchTime.Controls.Add(DiffBackUpMinutes);
             DiffPanelSchTime.Controls.Add(DiffBackUpType);
             DiffPanelSchTime.Controls.Add(DiffPanelSch);
             DiffPanelSchTime.Controls.Add(DiffBackUpAMPM);
             DiffPanelSchTime.Controls.Add(DiffBackUpHrs);
-            DiffPanelSchTime.Controls.Add(DiffBackUpMinutes);
             DiffPanelSchTime.Dock = DockStyle.Right;
             DiffPanelSchTime.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             DiffPanelSchTime.ForeColor = Color.White;
@@ -739,6 +722,17 @@
             DiffPanelSchTime.ShowText = true;
             DiffPanelSchTime.Size = new Size(411, 130);
             DiffPanelSchTime.TabIndex = 34;
+            // 
+            // DiffBackUpMinutes
+            // 
+            DiffBackUpMinutes.Increment = new decimal(new int[] { 15, 0, 0, 0 });
+            DiffBackUpMinutes.Location = new Point(221, 10);
+            DiffBackUpMinutes.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
+            DiffBackUpMinutes.Name = "DiffBackUpMinutes";
+            DiffBackUpMinutes.Size = new Size(89, 29);
+            DiffBackUpMinutes.TabIndex = 38;
+            DiffBackUpMinutes.TextAlign = HorizontalAlignment.Right;
+            DiffBackUpMinutes.ValueChanged += DiffBackUpMinutes_ValueChanged;
             // 
             // DiffBackUpType
             // 
@@ -945,27 +939,6 @@
             DiffBackUpHrs.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
             DiffBackUpHrs.Value = 1L;
             // 
-            // DiffBackUpMinutes
-            // 
-            DiffBackUpMinutes.BackColor = Color.Transparent;
-            DiffBackUpMinutes.BackColorA = Color.FromArgb(246, 246, 246);
-            DiffBackUpMinutes.BackColorB = Color.FromArgb(254, 254, 254);
-            DiffBackUpMinutes.BorderColor = Color.FromArgb(180, 180, 180);
-            DiffBackUpMinutes.ButtonForeColorA = Color.FromArgb(75, 75, 75);
-            DiffBackUpMinutes.ButtonForeColorB = Color.FromArgb(75, 75, 75);
-            DiffBackUpMinutes.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            DiffBackUpMinutes.ForeColor = Color.FromArgb(76, 76, 76);
-            DiffBackUpMinutes.Location = new Point(216, 11);
-            DiffBackUpMinutes.Maximum = 59L;
-            DiffBackUpMinutes.Minimum = 0L;
-            DiffBackUpMinutes.MinimumSize = new Size(62, 28);
-            DiffBackUpMinutes.Name = "DiffBackUpMinutes";
-            DiffBackUpMinutes.Size = new Size(93, 28);
-            DiffBackUpMinutes.TabIndex = 32;
-            DiffBackUpMinutes.Text = "dungeonNumeric11";
-            DiffBackUpMinutes.TextAlignment = ReaLTaiizor.Controls.DungeonNumeric._TextAlignment.Near;
-            DiffBackUpMinutes.Value = 0L;
-            // 
             // foxLabel8
             // 
             foxLabel8.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
@@ -1136,16 +1109,19 @@
             parrotGroupBox3.PerformLayout();
             TLogPanel.ResumeLayout(false);
             TLogPanelSchTime.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)TLogBackUpMinutes).EndInit();
             TLogPanelSch.ResumeLayout(false);
             TLogWeekOfDayPanel.ResumeLayout(false);
             TLogMonthPanel.ResumeLayout(false);
             FullPanel.ResumeLayout(false);
             FullPanelSchTime.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)FullBackUpMinutes).EndInit();
             FullPanelSch.ResumeLayout(false);
             FullWeekOfDayPanel.ResumeLayout(false);
             FullMonthPanel.ResumeLayout(false);
             DiffPanel.ResumeLayout(false);
             DiffPanelSchTime.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DiffBackUpMinutes).EndInit();
             DiffPanelSch.ResumeLayout(false);
             DiffWeekOfDayPanel.ResumeLayout(false);
             DiffMonthPanel.ResumeLayout(false);
@@ -1169,7 +1145,6 @@
         private ReaLTaiizor.Controls.DungeonNumeric TLogMonthOfDayNumericBox;
         private ReaLTaiizor.Controls.DungeonComboBox TLogBackUpAMPM;
         private ReaLTaiizor.Controls.DungeonNumeric TLogBackUpHrs;
-        private ReaLTaiizor.Controls.DungeonNumeric TLogBackUpMinutes;
         private ReaLTaiizor.Controls.LostBorderPanel FullPanel;
         private ReaLTaiizor.Controls.ParrotCheckBox FullCheckBox;
         private ReaLTaiizor.Controls.LostBorderPanel FullPanelSchTime;
@@ -1184,7 +1159,6 @@
         private ReaLTaiizor.Controls.DungeonNumeric FullMonthOfDayNumericBox;
         private ReaLTaiizor.Controls.DungeonComboBox FullBackUpAMPM;
         private ReaLTaiizor.Controls.DungeonNumeric FullBackUpHrs;
-        private ReaLTaiizor.Controls.DungeonNumeric FullBackUpMinutes;
         private ReaLTaiizor.Controls.LostBorderPanel DiffPanel;
         private ReaLTaiizor.Controls.ParrotCheckBox DiffCheckBox;
         private ReaLTaiizor.Controls.LostBorderPanel DiffPanelSchTime;
@@ -1199,7 +1173,6 @@
         private ReaLTaiizor.Controls.DungeonNumeric DiffMonthOfDayNumericBox;
         private ReaLTaiizor.Controls.DungeonComboBox DiffBackUpAMPM;
         private ReaLTaiizor.Controls.DungeonNumeric DiffBackUpHrs;
-        private ReaLTaiizor.Controls.DungeonNumeric DiffBackUpMinutes;
         private ReaLTaiizor.Controls.FoxLabel foxLabel8;
         private ReaLTaiizor.Controls.FoxLabel foxLabel7;
         private ReaLTaiizor.Controls.FoxLabel foxLabel6;
@@ -1209,5 +1182,9 @@
         private ReaLTaiizor.Controls.ParrotCheckBox isDelete;
         private ReaLTaiizor.Controls.DungeonNumeric beforeDays;
         private ReaLTaiizor.Controls.MetroLabel FullLabel;
+        private NumericUpDown numericUpDown1;
+        private NumericUpDown FullBackUpMinutes;
+        private NumericUpDown TLogBackUpMinutes;
+        private NumericUpDown DiffBackUpMinutes;
     }
 }

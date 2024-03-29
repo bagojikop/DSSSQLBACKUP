@@ -24,95 +24,72 @@ namespace SQLBackupService
             _config = config;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken )
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             string serviceDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
-           
             string parentDirectory = Path.Combine(serviceDirectory, "..");
             string filePath = Path.Combine(parentDirectory, "backupSettings.json");
 
-            while (!stoppingToken.IsCancellationRequested)
-                {
-                    
-                        string jsonString = File.ReadAllText(filePath);
+            string jsonString = File.ReadAllText(filePath);
+            Schema schema = JsonSerializer.Deserialize<Schema>(jsonString);
 
-
-                        Schema schema = JsonSerializer.Deserialize<Schema>(jsonString);
-
-                        TimeSpan intervalhrs = getintervaltime(schema);
-
-                        if (schema != null)
-                        {
-
-                            BackupSchedulde.executeBackup(schema, _logger);
-                        }
-
-                        // Delay for one hour before checking again
-                        await Task.Delay(intervalhrs, stoppingToken);
-                    //}
-
-                    //else
-                    //{
-                    //    // Log a message indicating that the file does not exist
-                    //    _logger.LogWarning("Backup settings file 'backupSettings.json' not found.");
-
-                    //    // Delay for a shorter interval before trying again
-                    //    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-                    //}
-                }
-            }
-            
- 
-
-        private TimeSpan getintervaltime(Schema schema)
-        {
-
-            TimeSpan timeSpan = TimeSpan.FromHours(1);
-
-            List<backupType> backupTypes = new List<backupType>();
-            if (schema.backupModes != null)
+            if (schema != null && schema.backupModes != null)
             {
-                backupTypes.Add(schema.backupModes.full);
-                backupTypes.Add(schema.backupModes.diff);
-                backupTypes.Add(schema.backupModes.log);
+                List<Task> backupTasks = new List<Task>();
 
-                var btype1 = backupTypes.Where(w => w.typ == "Hourly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
+                // Task for full backup
+                if (schema.backupModes.full != null && schema.backupModes.full.enabled)
+                {
+                    Task task1 = Task.Run(async () =>
+                    {
+                        while (!stoppingToken.IsCancellationRequested)
+                        {
+                            TimeSpan interval = BackupSchedule.backup(schema.backupModes.full, schema, _logger, 1);
+                            await Task.Delay(interval);
+                        }
+                    });
+                    backupTasks.Add(task1);
+                }
 
-                if (btype1 != null)
+                // Task for differential backup
+                if (schema.backupModes.diff != null && schema.backupModes.diff.enabled)
                 {
-                    timeSpan = TimeSpan.FromHours(btype1.hour) + TimeSpan.FromMinutes(btype1.minute);
-                    return timeSpan;
+                    Task task2 = Task.Run(async () =>
+                    {
+                        while (!stoppingToken.IsCancellationRequested)
+                        {
+                            TimeSpan interval = BackupSchedule.backup(schema.backupModes.diff, schema, _logger, 2);
+                            await Task.Delay(interval);
+                        }
+                    });
+                    backupTasks.Add(task2);
                 }
-                var btype2 = backupTypes.Where(w => w.typ == "Daily" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
 
-                if (btype2 != null)
+                // Task for log backup
+                if (schema.backupModes.log != null && schema.backupModes.log.enabled)
                 {
-                    timeSpan = TimeSpan.FromHours(24);
-                    return timeSpan;
+                    Task task3 = Task.Run(async () =>
+                    {
+                        while (!stoppingToken.IsCancellationRequested)
+                        {
+                            TimeSpan interval = BackupSchedule.backup(schema.backupModes.log, schema, _logger, 3);
+                            await Task.Delay(interval);
+                        }
+                    });
+                    backupTasks.Add(task3);
                 }
-                var btype3 = backupTypes.Where(w => w.typ == "Weekly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
 
-                if (btype3 != null)
-                {
-                    timeSpan = TimeSpan.FromHours(168);
-                    return timeSpan;
-                }
-                var btype4 = backupTypes.Where(w => w.typ == "Monthly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
-                if (btype4 != null)
-                {
-                    timeSpan = TimeSpan.FromHours(720);
-                    return timeSpan;
-                }
-                var btype5 = backupTypes.Where(w => w.typ == "Yearly" && w.enabled == true).Select(s => new { s.hour, s.minute }).FirstOrDefault();
-                if (btype5 != null)
-                {
-                    timeSpan = TimeSpan.FromHours(8760);
-                    return timeSpan;
-                }
+                // Wait for all backup tasks to complete
+                await Task.WhenAll(backupTasks);
             }
-            return timeSpan;
+            else
+            {
+                _logger.LogWarning("Backup modes are not specified in the schema. Skipping backup execution.");
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            }
         }
+
+
     }
 }
 

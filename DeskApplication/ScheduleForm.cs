@@ -18,6 +18,7 @@ namespace SQLBackupDesk
         public ScheduleForm()
         {
             InitializeComponent();
+
         }
 
         private void FullBackUpType_SelectedIndexChanged(object sender, EventArgs e)
@@ -32,15 +33,15 @@ namespace SQLBackupDesk
             Backupmodes.full.typ = FullBackUpType.Text;
             Backupmodes.full.hour = FullBackUpAMPM.Text == "PM" ? 12 + Convert.ToInt32(FullBackUpHrs.Value) : Convert.ToInt32(FullBackUpHrs.Value);
             Backupmodes.full.minute = Convert.ToInt32(FullBackUpMinutes.Value);
-            Backupmodes.full.weekOfDay = FullWeekOfDayComboBox.SelectedIndex ;
-            Backupmodes.full.day = Convert.ToInt32(FullMonthOfDayNumericBox.Value );
+            Backupmodes.full.weekOfDay = FullWeekOfDayComboBox.SelectedIndex;
+            Backupmodes.full.day = Convert.ToInt32(FullMonthOfDayNumericBox.Value);
 
 
             Backupmodes.diff.enabled = DiffCheckBox.Checked;
             Backupmodes.diff.typ = DiffBackUpType.Text;
             Backupmodes.diff.hour = DiffBackUpAMPM.Text == "PM" ? 12 + Convert.ToInt32(DiffBackUpHrs.Value) : Convert.ToInt32(DiffBackUpHrs.Value);
             Backupmodes.diff.minute = Convert.ToInt32(DiffBackUpMinutes.Value);
-            Backupmodes.diff.weekOfDay = DiffWeekOfDayComboBox.SelectedIndex ;
+            Backupmodes.diff.weekOfDay = DiffWeekOfDayComboBox.SelectedIndex;
             Backupmodes.diff.day = Convert.ToInt32(DiffMonthOfDayNumericBox.Value);
 
             Backupmodes.log.enabled = TLogCheckBox.Checked;
@@ -187,8 +188,30 @@ namespace SQLBackupDesk
 
         private void TLogBackUpType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Backupmodes.log.typ =TLogBackUpType.Text;
+            Backupmodes.log.typ = TLogBackUpType.Text;
             setValue();
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+            FullBackUpMinutes.Value = Math.Round(FullBackUpMinutes.Value / 15, 0) * 15;
+
+        }
+
+        private void FullBackUpMinutes_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DiffBackUpMinutes_ValueChanged(object sender, EventArgs e)
+        {
+            DiffBackUpMinutes.Value = Math.Round(DiffBackUpMinutes.Value / 15, 0) * 15;
+        }
+
+        private void TLogBackUpMinutes_ValueChanged(object sender, EventArgs e)
+        {
+            TLogBackUpMinutes.Value = Math.Round(TLogBackUpMinutes.Value / 15, 0) * 15;
         }
     }
 }
